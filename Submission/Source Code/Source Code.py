@@ -24,7 +24,7 @@ line = infile.readline()
 items = []
 numOfPack = 25  # the number of packed items
 
-t = 20000  # temperature
+t = 60000  # temperature
 
 constant = 0.99  # constant to decrease the temperature
 
