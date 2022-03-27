@@ -24,12 +24,12 @@ line = infile.readline()
 items = []
 numOfPack = 25  # the number of packed items
 
-t = 60000  # temperature
+t = 2000  # temperature
 
-constant = 0.99  # constant to decrease the temperature
+constant = 0.9  # constant to decrease the temperature
 
-changes = 4000  # 10N
-trials = 40000  # 100N
+changes = 0
+trials = 0
 
 sol = 0, 0  # a tuple of the solution
 
@@ -73,7 +73,7 @@ print(numOfPack)
 
 from random import random
 
-while changes != 0 and trials != 0:  # iterate until it reaches 10N changes or 100N trials
+while trials != 39999 or changes != 0:  # iterate until no changes accepted
     
     random_select = np.random.choice(400, numOfPack, replace=False)  # select 'numOfPack' integers from 0 to 399 (index)
     
@@ -85,15 +85,19 @@ while changes != 0 and trials != 0:  # iterate until it reaches 10N changes or 1
     
     # penalty of -20 utility for every pound over the weight limit.
     if total_weight > 500:
-        total_util -= 20
+        total_util -= 20 * (total_weight - 500)
         
     # random() returns float between 0 and 1. If it is less than certain probabilites, make a change
     if random() < calc_prob(total_util, sol[0], t):
         sol = total_util, total_weight
-        changes -= 1  # count a change
+        changes += 1  # count a change
     
-    trials -= 1  # count a trial
-    t *= constant  # decrease the temperature
+    trials += 1  # count a trial
+    
+    if changes == 4000 or trials == 40000:  # if it reaches 10N or 100N
+        changes = 0  # reset counting
+        trials = 0  
+        t *= constant  # decrease the temperature
 
 
 # Display the result
@@ -102,9 +106,7 @@ while changes != 0 and trials != 0:  # iterate until it reaches 10N changes or 1
 outfile = open('Result.txt', 'w')
 outfile.write("The better utilities of"+" "+str(numOfPack)+" "+"items are"+" "+str(round(sol[0], 1))+" "+"with"
               +" "+str(round(sol[1], 1))+" "+"pounds"+"\n")
-outfile.write("The number of changes is"+" "+str(4000-changes)+" "+"and trials is"+" "+str(40000-trials))
 outfile.close()
 
 # Just print
 print(f"The better utilities of {numOfPack} items are {round(sol[0], 1)} with {round(sol[1], 1)} pounds")
-print(f"The number of changes is {4000-changes} and trials is {40000-trials}")
