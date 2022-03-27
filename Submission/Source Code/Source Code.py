@@ -96,9 +96,15 @@ while changes != 0 and trials != 0:  # iterate until it reaches 10N changes or 1
     t *= constant  # decrease the temperature
 
 
-# Print the result
+# Display the result
 
+# Write to the output file
+outfile = open('Result.txt', 'w')
+outfile.write("The better utilities of"+" "+str(numOfPack)+" "+"items are"+" "+str(round(sol[0], 1))+" "+"with"
+              +" "+str(round(sol[1], 1))+" "+"pounds"+"\n")
+outfile.write("The number of changes is"+" "+str(4000-changes)+" "+"and trials is"+" "+str(40000-trials))
+outfile.close()
 
+# Just print
 print(f"The better utilities of {numOfPack} items are {round(sol[0], 1)} with {round(sol[1], 1)} pounds")
 print(f"The number of changes is {4000-changes} and trials is {40000-trials}")
-
